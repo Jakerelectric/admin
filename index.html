@@ -1,41 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>傑克電機 行政服務入口</title>
+<title>傑克電機 內部系統</title>
+<meta name="robots" content="noindex, nofollow">
+<script>
+/* 舊的行政服務連結（?page=…、?otp=…）自動轉到 /admin，原有的 LINE 連結照常可用 */
+(function(){ var q = location.search; if (/[?&](page|otp|bind)=/.test(q)) location.replace("admin/" + q); })();
+</script>
 <style>
-  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#F5F7FB;color:#14213D;
-    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
-  .l{text-align:center;padding:24px;font-size:15px;line-height:1.7}
-  .s{width:36px;height:36px;margin:0 auto 14px;border:4px solid #DBE5F7;border-top-color:#0064F3;border-radius:50%;animation:r .9s linear infinite}
-  @keyframes r{to{transform:rotate(360deg)}}
-  a{color:#0064F3}
+  :root{--bg:#F4F6FA;--surface:#FFFFFF;--ink:#0D1B30;--muted:#5B6B82;--line:#DCE3EE;--accent:#0064F3;--accent-soft:#E6F0FE}
+  @media (prefers-color-scheme: dark){:root{--bg:#0E1624;--surface:#162133;--ink:#E8EEF7;--muted:#9AA9BF;--line:#26344A;--accent:#4D94FF;--accent-soft:#1B2C47}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.5}
+  .wrap{max-width:880px;margin:0 auto;padding:32px 16px 48px}
+  header{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--accent);padding-bottom:14px;margin-bottom:28px}
+  .brand{color:var(--accent);font-weight:900;font-size:20px;letter-spacing:.04em}
+  .brand small{color:var(--muted);font-weight:700;font-size:12px;letter-spacing:.18em;margin-left:8px}
+  h1{font-size:26px;margin:0 0 6px}
+  p.lead{color:var(--muted);margin:0 0 24px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  a.card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;text-decoration:none;color:inherit;transition:border-color .15s, transform .15s}
+  a.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .icon{width:40px;height:40px;border-radius:9px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
+  .card h2{font-size:18px;margin:0 0 4px}
+  .card p{font-size:13px;color:var(--muted);margin:0}
+  .card .url{font-size:12px;color:var(--accent);margin-top:10px;font-variant-numeric:tabular-nums}
+  .card.soon{opacity:.55;pointer-events:none}
+  footer{margin-top:32px;font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
-<div class="l" id="l"><div class="s"></div>傑克電機 行政服務入口<br><small>載入中…</small></div>
-<script>
-/* 行政服務入口：畫面與資料都由 Apps Script 提供，這個檔案只負責載入，平常不用修改。 */
-(function () {
-  var API = 'https://script.google.com/a/macros/jaker.com.tw/s/AKfycbzV_WQ7PIykmOIIF0Q-xrp_bxKaKiE195c_YB7qgvwvDINYWpKERU70uW__CpmgBbJV/exec';
-  var q = new URLSearchParams(location.search);
-  var page = (q.get('page') || 'home').replace(/[^a-z0-9]/gi, '');
-  var otp = (q.get('otp') || '').replace(/[^0-9a-f]/gi, '');
-  if (page === '3d') { location.replace(API + '?page=3d'); return; }
-  var url = API + '?shell=1&page=' + encodeURIComponent(page) + (otp ? '&otp=' + otp : '');
-  fetch(url, { credentials: 'omit' })
-    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-    .then(function (html) {
-      if (html.indexOf('window.__PAGE__') < 0) throw new Error('bad');
-      /* 一次性登入代碼用過就從網址拿掉，避免被轉傳 */
-      if (otp) history.replaceState(null, '', location.pathname + '?page=' + page + (q.get('bind') ? '&bind=1' : ''));
-      document.open(); document.write(html); document.close();
-    })
-    .catch(function () {
-      document.getElementById('l').innerHTML = '目前無法載入，請稍後重新整理。<br><a href="' + API + '?page=' + page + '">改用備用網址開啟</a>';
-    });
-})();
-</script>
+<div class="wrap">
+  <header><span class="brand">傑克電機<small>JAKER ELECTRIC</small></span></header>
+  <h1>內部系統</h1>
+  <p class="lead">各系統都需要用公司 Google 帳號（@jaker.com.tw）登入。</p>
+  <div class="grid">
+    <a class="card" href="pm/">
+      <div class="icon">📊</div>
+      <h2>專案儀表板</h2>
+      <p>專案進度、任務、甘特圖、每週更新、專案資料</p>
+      <div class="url">/pm</div>
+    </a>
+    <a class="card" href="admin/">
+      <div class="icon">🏢</div>
+      <h2>行政服務</h2>
+      <p>公務車、充電樁、場地借用、報修等</p>
+      <div class="url">/admin</div>
+    </a>
+    <a class="card soon" href="#" aria-disabled="true">
+      <div class="icon">📦</div>
+      <h2>進銷存（建置中）</h2>
+      <p>庫存、業務、資材、生產</p>
+      <div class="url">/erp</div>
+    </a>
+  </div>
+  <footer>傑克電機股份有限公司．內部使用</footer>
+</div>
 </body>
 </html>
