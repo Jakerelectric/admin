@@ -28,6 +28,8 @@
     .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
     .then(function (html) {
       if (html.indexOf('window.__PAGE__') < 0) throw new Error('bad');
+      /* 入口已搬到 work.jaker.com.tw/admin：頁面裡舊的 admin.jaker.com.tw 連結改指到新網址 */
+      html = html.split('https://admin.jaker.com.tw/').join(location.origin + '/admin/').split('http://admin.jaker.com.tw/').join(location.origin + '/admin/');
       /* 一次性登入代碼用過就從網址拿掉，避免被轉傳 */
       if (otp) history.replaceState(null, '', location.pathname + '?page=' + page + (q.get('bind') ? '&bind=1' : ''));
       document.open(); document.write(html); document.close();
