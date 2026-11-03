@@ -22,7 +22,8 @@
   var q = new URLSearchParams(location.search);
   var page = (q.get('page') || 'home').replace(/[^a-z0-9]/gi, '');
   var otp = (q.get('otp') || '').replace(/[^0-9a-f]/gi, '');
-  if (page === '3d') { show3d(); return; }
+  /* 3D 廠區的正式網址是 /3d，舊的 /admin/?page=3d 連結自動轉過去 */
+  if (page === '3d') { q.delete('page'); q.delete('otp'); location.replace(location.origin + '/3d/' + (q.toString() ? '?' + q.toString() : '')); return; }
   /* 3D 廠區用到 google.script.run，不能像其他頁面一樣直接載入，改成整頁內嵌，網址維持在公司網址 */
   function show3d() {
     document.title = '傑克電機 3D 廠區';
