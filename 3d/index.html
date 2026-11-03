@@ -1,12 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>3D 廠區｜傑克電機</title>
+<title>傑克電機 3D 廠區</title>
 <meta name="robots" content="noindex">
-<script>/* 3D 廠區目前由行政服務系統提供；之後若搬家，只要改這一行 */ location.replace("../admin/?page=3d");</script>
-<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0E1624;color:#E8EEF7;font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif}a{color:#4D94FF}</style>
+<style>
+  html,body{margin:0;height:100%;background:#0E1624}
+  iframe{border:0;display:block;width:100%;height:100vh;height:100dvh}
+</style>
 </head>
-<body><p>正在開啟 3D 廠區…　沒有自動跳轉請<a href="../admin/?page=3d">按這裡</a></p></body>
+<body>
+<script>
+/* 3D 廠區：畫面由行政服務的 Apps Script 提供，整頁內嵌，網址維持在 work.jaker.com.tw/3d */
+(function () {
+  var API = 'https://script.google.com/a/macros/jaker.com.tw/s/AKfycbzV_WQ7PIykmOIIF0Q-xrp_bxKaKiE195c_YB7qgvwvDINYWpKERU70uW__CpmgBbJV/exec';
+  var q = new URLSearchParams(location.search);
+  q.set('page', '3d');
+  var f = document.createElement('iframe');
+  f.src = API + '?' + q.toString();
+  f.title = '3D 廠區';
+  f.allow = 'fullscreen';
+  document.body.appendChild(f);
+  /* 3D 頁載入後會通知這裡，這裡把行政服務入口的登入代碼傳過去（同事人物、預約資料要登入才看得到） */
+  window.addEventListener('message', function (e) {
+    var host = '';
+    try { host = new URL(e.origin).hostname; } catch (x) { return; }
+    if (!/\.googleusercontent\.com$/.test(host) || !e.data || e.data.type !== 'jk3d-ready' || !e.source) return;
+    var t = '';
+    try { t = localStorage.getItem('jaker.token') || ''; } catch (x) { t = ''; }
+    if (t) e.source.postMessage({ type: 'jaker-token', token: t }, e.origin);
+  });
+})();
+</script>
+</body>
 </html>
