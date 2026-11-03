@@ -27,7 +27,7 @@
     .then(function (html) {
       if (html.indexOf('id="authView"') < 0) throw new Error('bad');
       html = html.replace('<head>', '<head><script>window.__ERP_API__=' + JSON.stringify(API) + '<\/script>');
-      document.open(); document.write(html); document.close();
+      document.open(); document.write(html); document.close(); if (!document.title) document.title = '傑克電機 進銷存系統';
     })
     .catch(function () {
       document.getElementById('l').innerHTML = '目前無法載入，請稍後重新整理。<br><a href="' + API + '">改用備用網址開啟</a>';
