@@ -3,22 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>進銷存系統｜傑克電機</title>
-<meta name="robots" content="noindex">
-<meta http-equiv="refresh" content="0; url=https://script.google.com/a/macros/jaker.com.tw/s/AKfycbwk4-8lqSpRBesmUJUooN6Ov6c8tdnvxYVQTC00xzXHyBAqwGMRXEie8JuMY55VYMAEPQ/exec">
+<title>傑克電機 進銷存系統</title>
+<meta name="robots" content="noindex, nofollow">
 <style>
-  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F4F6FA;color:#0D1B30;font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif}
-  .box{text-align:center;padding:24px}
-  .brand{color:#0064F3;font-weight:900;letter-spacing:.04em;margin-bottom:12px}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#F4F6FA;color:#0D1B30;
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+  @media (prefers-color-scheme: dark){body{background:#0d1220;color:#e7ecf6}}
+  .l{text-align:center;padding:24px;font-size:15px;line-height:1.7}
+  .s{width:36px;height:36px;margin:0 auto 14px;border:4px solid #DBE5F7;border-top-color:#0064F3;border-radius:50%;animation:r .9s linear infinite}
+  @keyframes r{to{transform:rotate(360deg)}}
   a{color:#0064F3}
 </style>
-<script>location.replace("https://script.google.com/a/macros/jaker.com.tw/s/AKfycbwk4-8lqSpRBesmUJUooN6Ov6c8tdnvxYVQTC00xzXHyBAqwGMRXEie8JuMY55VYMAEPQ/exec" + location.search);</script>
 </head>
 <body>
-  <div class="box">
-    <div class="brand">傑克電機 JAKER ELECTRIC</div>
-    <p>正在開啟進銷存系統…</p>
-    <p>沒有自動跳轉的話，請<a href="https://script.google.com/a/macros/jaker.com.tw/s/AKfycbwk4-8lqSpRBesmUJUooN6Ov6c8tdnvxYVQTC00xzXHyBAqwGMRXEie8JuMY55VYMAEPQ/exec">按這裡</a>（用系統帳號密碼登入）。</p>
-  </div>
+<div class="l" id="l"><div class="s"></div>傑克電機 進銷存系統<br><small>載入中…</small></div>
+<script>
+/* 進銷存系統入口：畫面與資料都由 Apps Script 提供，這個檔案只負責載入，平常不用修改。
+   網頁留在 work.jaker.com.tw/erp，資料用 fetch 呼叫 Apps Script（手機相機、下載都能用）。 */
+(function () {
+  var API = 'https://script.google.com/a/macros/jaker.com.tw/s/AKfycbwk4-8lqSpRBesmUJUooN6Ov6c8tdnvxYVQTC00xzXHyBAqwGMRXEie8JuMY55VYMAEPQ/exec';
+  fetch(API + '?shell=1', { credentials: 'omit' })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    .then(function (html) {
+      if (html.indexOf('id="authView"') < 0) throw new Error('bad');
+      html = html.replace('<head>', '<head><script>window.__ERP_API__=' + JSON.stringify(API) + '<\/script>');
+      document.open(); document.write(html); document.close();
+    })
+    .catch(function () {
+      document.getElementById('l').innerHTML = '目前無法載入，請稍後重新整理。<br><a href="' + API + '">改用備用網址開啟</a>';
+    });
+})();
+</script>
 </body>
 </html>
