@@ -17,7 +17,7 @@ SPLITS = {"6949": [("2026-09-07", 20)]}
 
 def fetch(dataset, sid, start):
     key = os.path.join(CACHE, f"{dataset}_{sid}_{TODAY}.json")
-    if os.path.exists(key):
+    if os.path.exists(key) and time.time() - os.path.getmtime(key) < 3600:
         return json.load(open(key))
     q = urllib.parse.urlencode({"dataset": dataset, "data_id": sid, "start_date": start})
     for attempt in range(8):
